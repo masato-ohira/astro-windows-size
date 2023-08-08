@@ -1,0 +1,79 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+const meta = {
+  title: 'DemoSite',
+}
+
+const list = [
+  { id: 'value-screen', name: '画面サイズ' },
+  { id: 'value-window', name: 'ウィンドウサイズ' },
+  { id: 'value-ua', name: 'UA' },
+]
+---
+
+<Layout meta={meta}>
+  <main>
+    <div class='container p-6'>
+      <table class='table is-fullwidth'>
+        <tbody>
+          {
+            list.map((i) => {
+              return (
+                <tr>
+                  <th class='p-4'>{i.name}</th>
+                  <td class='p-4'>
+                    <span id={i.id} />
+                  </td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
+
+      <script is:inline type='text/javascript'>
+        const getScreenSize = () => {
+          const screenW = window.parent.screen.width
+          const screenH = window.parent.screen.height
+          const text = `横幅 = ${screenW} / 高さ = ${screenH}`
+          document.getElementById('value-screen').innerHTML = text
+        }
+
+        const getWindowSize = () => {
+          const sW = window.innerWidth
+          const sH = window.innerHeight
+          const text = `横幅 = ${sW} / 高さ = ${sH}`
+          document.getElementById('value-window').innerHTML = text
+        }
+
+        const getUa = () => {
+          const ua = navigator.userAgent
+          document.getElementById('value-ua').innerHTML = ua
+        }
+
+        const init = () => {
+          getScreenSize()
+          getWindowSize()
+          getUa()
+        }
+
+        init()
+
+        //ウィンドウサイズ変更時に更新
+        window.onresize = function () {
+          init()
+        }
+      </script>
+    </div>
+  </main>
+</Layout>
+
+<style lang='scss'>
+  .table {
+    th {
+      width: 5%;
+      white-space: nowrap;
+    }
+  }
+</style>
